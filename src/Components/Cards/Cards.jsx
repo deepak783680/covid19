@@ -1,0 +1,77 @@
+import React from "react";
+import { Card, CardContent, Typography, Grid } from "@material-ui/core";
+import styles from "./Cards.module.css";
+import CountUp from "react-countup";
+import cx from "classnames";
+
+const Cards = ({
+  data: { confirmed, recovered, deaths, lastUpdate },
+  country,
+}) => {
+  if (!confirmed) {
+    return "Loading...";
+  }
+  const active = confirmed["value"] - recovered["value"] - deaths["value"];
+  let carddetails = [
+    {
+      style: styles.infected,
+      text: "Total Number of infect cases",
+      value: confirmed.value,
+      bottomText: " of COVID-19",
+    },
+    {
+      style: styles.recovered,
+      text: "Recovered Number of recoveries",
+      value: recovered.value,
+      bottomText: "from COVID-19",
+    },
+    {
+      style: styles.deaths,
+      text: "Deaths Number of deaths",
+      value: deaths.value,
+      bottomText: "caused by COVID-19",
+    },
+    {
+      style: styles.active,
+      text: "Active Number of active cases",
+      value: active,
+      bottomText: "of COVID-19",
+    },
+  ];
+  return (
+    <div className={styles.container}>
+      <Grid container spacing={3} justify="center">
+        {carddetails.map((detail, index) => (
+          <Grid
+            item
+            component={Card}
+            xs={12}
+            md={2}
+            className={cx(styles.Card, detail.style)}
+            key={index}
+            style={{ margin: "0px 23.675px", padding: "12px" }}
+          >
+            <CardContent>
+              <Typography color="textPrimary" gutterBottom>
+                <b>{detail.text}</b>
+              </Typography>
+              <Typography variant="h5">
+                <CountUp
+                  start={0}
+                  end={detail.value}
+                  duration={2}
+                  separator=","
+                />
+              </Typography>
+              
+              
+
+            </CardContent>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
+};
+
+export default Cards;
